@@ -26,7 +26,7 @@ Put the jar on the class path, e.g. in Maven:
 In your `log4j2.xml` configuration file, configure the pattern layout for example like this:
 
 ```
-<PatternLayout pattern="%d{HH:mm:ss.SSS} %-5level %callDepth %logger{1.}.%M - %msg%xEx%n"/>
+<PatternLayout pattern="%d{HH:mm:ss.SSS} %-5level %traceDepth %logger{1.}.%M - %msg%xEx%n"/>
 ```
 
 The log output will then look similar to this:
@@ -55,7 +55,7 @@ you mess up.
 
 === Configuration
 
-As can be seen above, the call depth is introduced into the log message by using the `%callDepth` pattern parameter.
+As can be seen above, the call depth is introduced into the log message by using the `%traceDepth` pattern parameter.
 The default indentation level is 2 spaces. You can override that by specifying the number of spaces as an option
-of the parameter, e.g. `%callDepth{4}` will indent by 4 spaces.
+of the parameter, e.g. `%traceDepth{4}` will indent by 4 spaces.
 
