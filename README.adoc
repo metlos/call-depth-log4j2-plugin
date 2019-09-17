@@ -1,0 +1,61 @@
+== Trace Depth Log4j2 Plugin
+
+This is a simple Log4j2 plugin that enables indentation of the log messages based on the "depth" of the `traceEntry()`
+and `traceExit()` pairs.
+
+Log4j2 enables tracing of the method calls (or any "nesting" concepts) by the `Logger.traceEntry()` and
+`Logger.traceExit()` methods. To visualize the nesting it might be handy to log such messages indented by the "depth"
+of the current nesting "stack". This simple Log4j2 plugin does exactly that.
+
+While this might not be that useful for traditional logging scenarios, it might be useful for trace logging which
+is intended for the developers to trace the method calls and entry and exit to certain critical sections. In such
+situations, being able to visually distinguish the sections by depth might help with making sense of the logs.
+
+=== Usage
+
+Put the jar on the class path, e.g. in Maven:
+
+```xml
+<dependency>
+  <groupId>pw.krejci</groupId>
+  <artifactId>tracedepth-log4j2-plugin</artifactId>
+  <version>...</version>
+</dependency>
+```
+
+In your `log4j2.xml` configuration file, configure the pattern layout for example like this:
+
+```
+<PatternLayout pattern="%d{HH:mm:ss.SSS} %-5level %callDepth %logger{1.}.%M - %msg%xEx%n"/>
+```
+
+The log output will then look similar to this:
+
+```
+09:24:37.270 TRACE  o.e.Main.main - Enter main <1>
+09:24:37.271 TRACE    o.e.BusinessLayer.process - Enter process
+09:24:37.272 TRACE      o.e.BusinessLayer.process - computed the values to store <2>
+09:24:37.273 TRACE      o.e.DataLayer.transaction - Enter transaction
+09:24:37.273 TRACE        o.e.DataLayer.storeValues - Enter storing the values
+09:24:37.275 TRACE        o.e.DataLayer.storeValues - Exit storing the values: 5
+09:24:37.276 TRACE      o.e.DataLayer.transaction - Exit transaction: 5 <3>
+09:24:37.277 TRACE      o.e.BusinessLayer.process - stored 5 values
+09:24:37.277 INFO  o.e.BusinessLayer.process - Processed 5 new values <4>
+09:24:37.278 TRACE    o.e.BusinessLayer.process - Exit process
+09:24:37.278 TRACE  o.e.Main.main - Exit
+```
+
+<1> `Logger.traceEntry()` called in the `main()` method
+<2> The ordinary `Logger.trace(String)` message will be indented as well
+<3> `Logger.traceExit()` called and the indentation of the subsequent trace messages is decreased
+<4> Other log levels are not affected by the call depth.
+
+NOTE: The plugin is not smart enough to distinguish unmatched entry/exit pairs. You will get uneven indentation if
+you mess up.
+
+=== Configuration
+
+As can be seen above, the call depth is introduced into the log message by using the `%callDepth` pattern parameter.
+The default indentation level is 2 spaces. You can override that by specifying the number of spaces as an option
+of the parameter, e.g. `%callDepth{4}` will indent by 4 spaces.
+
