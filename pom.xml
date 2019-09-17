@@ -4,7 +4,7 @@
 
     <groupId>pw.krejci</groupId>
     <artifactId>tracedepth-log4j2-plugin</artifactId>
-    <version>0.1.0-SNAPSHOT</version>
+    <version>0.1.0</version>
 
     <name>TraceDepth Log4j2 Plugin</name>
     <description>
@@ -111,7 +111,7 @@
         <connection>scm:git:git://github.com/metlos/tracedepth-log4j2-plugin.git</connection>
         <developerConnection>scm:git:ssh://git@github.com/metlos/tracedepth-log4j2-plugin.git</developerConnection>
         <url>https://github.com/metlos/tracedepth-log4j2-plugin</url>
-        <tag>HEAD</tag>
+        <tag>tracedepth-log4j2-plugin-0.1.0</tag>
     </scm>
 
     <distributionManagement>
